@@ -38,8 +38,20 @@ class DoorRepo(
                 emit(res)
             }
         }
-
     }
+
+
+   suspend fun setNameDoor(id:Int, name: String){
+       realm.write {
+           // fetch a frog from the realm by primary key
+           val door: DoorDb? =
+               this.query(DoorDb::class, "id=$0", id).first().find()
+           // modify the frog's age in the write transaction to persist the new age to the realm
+           door?.name = name
+       }
+    }
+
+
 
 
     private suspend fun refreshData() = flow<DataStatus<DoorAll, String>> {

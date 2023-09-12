@@ -22,39 +22,55 @@ import com.example.doorandcameraview.ui.component.DataIsEmpty
 import com.example.doorandcameraview.ui.component.DataIsError
 import com.example.doorandcameraview.ui.component.DataIsLoading
 import com.example.doorandcameraview.ui.theme.DoorAndCameraViewTheme
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 
 @Composable
 fun CameraScreenUI(vm: CameraVM = viewModel()) {
     val state = vm.state.collectAsState().value
-    CameraScreenUI(stateUI = state)
+    CameraScreenUI(stateUI = state){
+        vm.refresh()
+    }
 }
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun CameraScreenUI(stateUI: CameraStateUI) {
-    when (stateUI) {
-        CameraStateUI.Empty -> {
-            DataIsEmpty()
-        }
-        is CameraStateUI.Error -> {
-            DataIsError(text = stateUI.error)
-        }
-        CameraStateUI.Loading -> {
-            DataIsLoading()
-        }
-        is CameraStateUI.Success -> {
-            LazyColumn(contentPadding = PaddingValues(horizontal = 21.dp)) {
-                stateUI.data.rooms.forEach { (key, camers) ->
-                    if(camers.isNotEmpty()) {
-                        item {
-                            Text(key?:"Комната не определенна",
-                                style = MaterialTheme.typography.headlineMedium.copy(fontSize = 21.sp,
-                                    fontWeight = FontWeight(300)),
-                                modifier = Modifier.padding(vertical = 8.dp))
-                        }
-                        items(camers) { camera ->
-                            CardCameraUI(camera)
+fun CameraScreenUI(stateUI: CameraStateUI, refresh:()->Unit) {
+    SwipeRefresh(
+        state = rememberSwipeRefreshState(stateUI is CameraStateUI.Loading),
+        onRefresh =refresh,
+    ) {
+        when (stateUI) {
+            CameraStateUI.Empty -> {
+                DataIsEmpty()
+            }
+
+            is CameraStateUI.Error -> {
+                DataIsError(text = stateUI.error)
+            }
+
+            CameraStateUI.Loading -> {
+                DataIsLoading()
+            }
+
+            is CameraStateUI.Success -> {
+                LazyColumn(contentPadding = PaddingValues(horizontal = 21.dp)) {
+                    stateUI.data.rooms.forEach { (key, camers) ->
+                        if (camers.isNotEmpty()) {
+                            item {
+                                Text(
+                                    key ?: "Комната не определенна",
+                                    style = MaterialTheme.typography.headlineMedium.copy(
+                                        fontSize = 21.sp,
+                                        fontWeight = FontWeight(300)
+                                    ),
+                                    modifier = Modifier.padding(vertical = 8.dp)
+                                )
+                            }
+                            items(camers) { camera ->
+                                CardCameraUI(camera)
+                            }
                         }
                     }
                 }
@@ -71,7 +87,7 @@ private fun CameraScreenUIPreview(){
     )))))
 
     DoorAndCameraViewTheme {
-        CameraScreenUI(state)
+        CameraScreenUI(state,{})
     }
 
 

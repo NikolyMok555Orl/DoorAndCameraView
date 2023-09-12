@@ -25,6 +25,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,13 +42,18 @@ import coil.compose.AsyncImage
 import com.example.doorandcameraview.R
 import com.example.doorandcameraview.camera.data.model.Camera
 import com.example.doorandcameraview.door.data.model.Door
+import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
-fun CardDoorUI(door: Door, modifier: Modifier = Modifier) {
+fun CardDoorUI(
+    door: Door,
+    onEditName: (door: Door) -> Unit,
+    modifier: Modifier = Modifier
+) {
 
-
+    val scope= rememberCoroutineScope()
     val swipeableState = rememberSwipeableState(0)
     val widthSize = with(LocalDensity.current) { 120.dp.toPx() }
     val anchors = mapOf(0f to 0, -widthSize to 1)
@@ -63,12 +69,24 @@ fun CardDoorUI(door: Door, modifier: Modifier = Modifier) {
                 orientation = Orientation.Horizontal
             )
     ) {
-        Row(verticalAlignment = Alignment.CenterVertically,
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.End,
-            modifier = Modifier.fillMaxWidth().padding(vertical = 24.dp, horizontal = 10.dp).align(
-                Alignment.CenterEnd) ) {
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 24.dp, horizontal = 10.dp)
+                .align(
+                    Alignment.CenterEnd
+                )
+        ) {
             IconButton(
-                onClick = { /*TODO*/ }, modifier = Modifier.padding(end=15.dp)
+                onClick = {
+                    scope.launch {
+                        swipeableState.animateTo(0)
+                    }
+                    onEditName(door)
+                          }, modifier = Modifier
+                    .padding(end = 15.dp)
                     .size(36.dp)
                     .border(
                         BorderStroke(1.dp, Color.LightGray), CircleShape
@@ -90,7 +108,7 @@ fun CardDoorUI(door: Door, modifier: Modifier = Modifier) {
 
             ) {
                 Icon(
-                  ImageVector.vectorResource(R.drawable.ic_star_empty),
+                    ImageVector.vectorResource(R.drawable.ic_star_empty),
                     contentDescription = null,
                     tint = Color(0xFFE0BE35)
                 )

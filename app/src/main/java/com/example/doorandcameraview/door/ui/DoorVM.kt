@@ -30,7 +30,17 @@ class DoorVM:ViewModel() {
     fun refresh() {
         viewModelScope.launch {
             _state.emit(DoorStateUI.Loading)
-            doorRepo.getDoor(true).collect {
+           doorRepo.getDoor(true).collect {
+                mapToState(it)
+            }
+        }
+    }
+
+
+    fun setNameDoor(id:Int, name:String){
+        viewModelScope.launch {
+            doorRepo.setNameDoor(id, name)
+            doorRepo.getDoor(false).collect {
                 mapToState(it)
             }
         }
