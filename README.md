@@ -1,10 +1,9 @@
 # DoorAndCameraView
 
 Stack: 
-    • Kotlin
-    • MVVM
-    • Realm
-    • Ktor
-    • Coroutines
-    • LiveData
-    • Jetpack Compose
+    - Kotlin
+    - MVVM
+    - Realm
+    - Ktor
+    - Coroutines
+    - Jetpack Compose
