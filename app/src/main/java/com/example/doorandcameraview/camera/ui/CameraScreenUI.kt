@@ -1,6 +1,5 @@
 package com.example.doorandcameraview.camera.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -34,7 +33,6 @@ fun CameraScreenUI(vm: CameraVM = viewModel()) {
 }
 
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CameraScreenUI(stateUI: CameraStateUI, refresh:()->Unit) {
     SwipeRefresh(

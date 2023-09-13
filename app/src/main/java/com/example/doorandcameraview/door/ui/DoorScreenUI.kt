@@ -1,21 +1,15 @@
 package com.example.doorandcameraview.door.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.doorandcameraview.camera.ui.CameraScreenUI
-import com.example.doorandcameraview.camera.ui.CameraStateUI
-import com.example.doorandcameraview.camera.ui.CameraVM
-import com.example.doorandcameraview.camera.ui.component.CardCameraUI
 import com.example.doorandcameraview.door.data.model.Door
 import com.example.doorandcameraview.door.ui.component.CardDoorUI
 import com.example.doorandcameraview.door.ui.component.EditNameDialogUI

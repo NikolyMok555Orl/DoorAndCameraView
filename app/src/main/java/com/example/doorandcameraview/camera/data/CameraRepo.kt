@@ -14,14 +14,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.withContext
-import okhttp3.internal.wait
 
-class CameraRepo(private val api: AppApi = App.api, private val realm: Realm = App.realm, private val roomRepo: RoomRepo= RoomRepo(realm)) {
+class CameraRepo(
+    private val api: AppApi = App.api,
+    private val realm: Realm = App.realm,
+    private val roomRepo: RoomRepo = RoomRepo(realm)
+) {
 
-
-
-
-    suspend fun getCamera(isStrong: Boolean) = flow<DataStatus<RoomAndCamera, String>> {
+    suspend fun getCamera(isStrong: Boolean) = flow {
         if (isStrong) {
             emit(refreshData().last())
         } else {
@@ -43,17 +43,17 @@ class CameraRepo(private val api: AppApi = App.api, private val realm: Realm = A
         val res = when (val response = getCameraFromApi()) {
             is DataStatus.Success -> {
 
-                val resSaveRoom = roomRepo.saveTypeRoom(response.data?.room?: emptyList())
-                val resSaveCamera = saveCamera(response.data?.cameras?: emptyList())
+                val resSaveRoom = roomRepo.saveTypeRoom(response.data?.room ?: emptyList())
+                val resSaveCamera = saveCamera(response.data?.cameras ?: emptyList())
                 if (resSaveCamera is DataStatus.Success && resSaveRoom is DataStatus.Success) {
                     DataStatus.Success<Nothing, String>(null)
                 } else {
                     if (resSaveCamera is DataStatus.Error) {
                         DataStatus.Error<Nothing, String>(resSaveCamera.error ?: "")
-                    } else if(resSaveRoom is DataStatus.Error) {
+                    } else if (resSaveRoom is DataStatus.Error) {
                         DataStatus.Error<Nothing, String>(resSaveRoom.error ?: "")
-                    }else{
-                        DataStatus.Error<Nothing, String>( "Неизвестная ошибка")
+                    } else {
+                        DataStatus.Error<Nothing, String>("Неизвестная ошибка")
                     }
                 }
 
@@ -82,30 +82,24 @@ class CameraRepo(private val api: AppApi = App.api, private val realm: Realm = A
             val rooms = mutableMapOf<String?, MutableList<Camera>>()
             kotlin.runCatching {
                 realm.query(CameraDb::class).find()
-            }.onSuccess {cameras->
+            }.onSuccess { cameras ->
                 roomsDb.forEach {
-                    rooms[it.name]= mutableListOf()
+                    rooms[it.name] = mutableListOf()
                 }
-                if (cameras.isNotEmpty()){
-                    rooms[null]= mutableListOf()
+                if (cameras.isNotEmpty()) {
+                    rooms[null] = mutableListOf()
                 }
-
                 cameras.forEach {
-                    if(it.roomTitle!=null &&rooms.containsKey(it.roomTitle)){
+                    if (it.roomTitle != null && rooms.containsKey(it.roomTitle)) {
                         rooms[it.roomTitle]?.add(it.toCamera())
-                    }else{
+                    } else {
                         rooms[null]?.add(it.toCamera())
                     }
                 }
                 emit(DataStatus.Success(RoomAndCamera(rooms)))
-
-
             }.onFailure {
                 emit(DataStatus.Error("${it.message}"))
-
             }
-
-
 
         }.onFailure {
             emit(DataStatus.Error("${it.message}"))
@@ -113,29 +107,26 @@ class CameraRepo(private val api: AppApi = App.api, private val realm: Realm = A
     }
 
 
-
-
-    private suspend fun saveCamera(cameras:List<CameraJs>): DataStatus<Nothing, String>{
+    private suspend fun saveCamera(cameras: List<CameraJs>): DataStatus<Nothing, String> {
         try {
             withContext(Dispatchers.IO) {
                 realm.write {
-                cameras.forEach { camera ->
+                    cameras.forEach { camera ->
                         this.copyToRealm(
-                                CameraDb().apply {
-                                    name = camera.name
-                                    snapshot = camera.snapshot
-                                    roomTitle = camera.room
-                                    favorites = camera.favorites
-                                    rec = camera.rec
-                                })
-                        }
+                            CameraDb().apply {
+                                name = camera.name
+                                snapshot = camera.snapshot
+                                roomTitle = camera.room
+                                favorites = camera.favorites
+                                rec = camera.rec
+                            })
                     }
                 }
+            }
             return DataStatus.Success<Nothing, String>(null)
         } catch (e: Exception) {
             return DataStatus.Error<Nothing, String>("${e.message}")
         }
-
 
 
     }

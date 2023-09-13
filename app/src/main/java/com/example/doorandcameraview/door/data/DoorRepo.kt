@@ -140,7 +140,6 @@ class DoorRepo(
         } catch (e: Exception) {
             DataStatus.Error("Ошибка при загрузки камер: \n${e.message}")
         }
-
     }
 
 }

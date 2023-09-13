@@ -7,9 +7,7 @@ import com.example.doorandcameraview.camera.data.model.RoomAndCamera
 import com.example.doorandcameraview.utils.DataStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.lang.Error
 
 class CameraVM() : ViewModel() {
 
@@ -40,7 +38,6 @@ class CameraVM() : ViewModel() {
         when (data) {
             is DataStatus.Error -> {
                 _state.emit(CameraStateUI.Error(data.error ?: ""))
-
             }
 
             is DataStatus.Loading -> {

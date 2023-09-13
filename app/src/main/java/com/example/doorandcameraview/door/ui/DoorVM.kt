@@ -2,9 +2,6 @@ package com.example.doorandcameraview.door.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.doorandcameraview.camera.data.CameraRepo
-import com.example.doorandcameraview.camera.data.model.RoomAndCamera
-import com.example.doorandcameraview.camera.ui.CameraStateUI
 import com.example.doorandcameraview.door.data.DoorRepo
 import com.example.doorandcameraview.door.data.model.DoorAll
 import com.example.doorandcameraview.utils.DataStatus

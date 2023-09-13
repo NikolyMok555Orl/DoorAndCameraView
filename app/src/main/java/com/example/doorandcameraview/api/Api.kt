@@ -13,7 +13,6 @@ import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.get
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.json.json
-import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 
 class Api :AppApi{
@@ -32,10 +31,7 @@ class Api :AppApi{
         private const val API_URL = "$DOMAIN/api/rubetek/"
 
 
-        @OptIn(ExperimentalSerializationApi::class)
         private val client = HttpClient(
-            // Android,
-            //  MockApi.mockEngine
         ) {
             install(ContentNegotiation) {
                 json(
