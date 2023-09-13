@@ -16,3 +16,4 @@ local.properties
 Тестовое задание Android.odt
 *.~lock.Тестовое задание Android.odt#
 /load
+.idea/
