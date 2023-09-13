@@ -169,7 +169,6 @@ fun CardDoorUI(
                             )
                         }
                     }
-                    //Color(0xFF03A9F4)
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_key_lock),
                         contentDescription = null,
