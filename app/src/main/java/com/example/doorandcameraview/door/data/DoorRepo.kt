@@ -10,6 +10,7 @@ import com.example.doorandcameraview.door.data.model.DoorAll
 import com.example.doorandcameraview.room.data.RoomRepo
 import com.example.doorandcameraview.utils.DataStatus
 import io.realm.kotlin.Realm
+import io.realm.kotlin.UpdatePolicy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.last
@@ -120,7 +121,7 @@ class DoorRepo(
                             room = door.room
                             favorites = door.favorites
                             snapshot = door.snapshot
-                        })
+                        }, updatePolicy = UpdatePolicy.ALL)
                     }
                 }
             }

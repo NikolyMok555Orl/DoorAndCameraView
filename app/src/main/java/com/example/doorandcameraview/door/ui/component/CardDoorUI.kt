@@ -35,6 +35,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -42,6 +43,7 @@ import coil.compose.AsyncImage
 import com.example.doorandcameraview.R
 import com.example.doorandcameraview.camera.data.model.Camera
 import com.example.doorandcameraview.door.data.model.Door
+import com.example.doorandcameraview.ui.theme.DoorAndCameraViewTheme
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 
@@ -154,7 +156,7 @@ fun CardDoorUI(
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column() {
                         Text(text = door.name, style = MaterialTheme.typography.bodyMedium)
                         if (door.snapshot != null) {
                             Text(
@@ -179,5 +181,15 @@ fun CardDoorUI(
             }
 
         }
+    }
+}
+
+
+
+@Preview(showBackground = true)
+@Composable
+private fun CardDoorUIPreview(){
+    DoorAndCameraViewTheme {
+        CardDoorUI(Door(1, "Door Door", "Room 1", true, null),{})
     }
 }
